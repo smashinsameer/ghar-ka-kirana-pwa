@@ -1,0 +1,32 @@
+{
+  "name": "घर का किराना - Grocery & Supermarket List",
+  "short_name": "किराना लिस्ट",
+  "description": "मम्मी के लिए सम्पूर्ण सुपरमार्केट व किराना खरीदारी ऐप - WhatsApp शेयर के साथ",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f0fdf4",
+  "theme_color": "#059669",
+  "categories": ["shopping", "lifestyle", "food"],
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

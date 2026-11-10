@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>घर का किराना - DMart Grocery & Supermarket Shopping List</title>
+
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="किराना लिस्ट">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top App Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-wrapper">
+          <img src="icons/icon.svg" alt="App Logo" class="app-logo">
+          <div class="brand-titles">
+            <h1 id="headerTitle">घर का किराना</h1>
+            <p id="headerSubtitle">मम्मी की किराना लिस्ट (Grocery List)</p>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <!-- 3-Way Language Switcher -->
+          <div class="lang-switcher" role="radiogroup" aria-label="Language Mode">
+            <button class="lang-btn active" data-lang="both" title="Bilingual / दोनों भाषाएं">दोनों</button>
+            <button class="lang-btn" data-lang="hi" title="केवल हिन्दी">हिन्दी</button>
+            <button class="lang-btn" data-lang="en" title="English Only">Eng</button>
+          </div>
+
+          <!-- Settings -->
+          <button id="settingsBtn" class="icon-btn" title="WhatsApp सेटिंग्स" aria-label="Settings">
+            ⚙️
+          </button>
+          <!-- Help -->
+          <button id="helpBtn" class="icon-btn" title="मदद व जानकारी" aria-label="Help">
+            ℹ️
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode / Profile Switcher Bar (Sabzi vs Grocery vs All) -->
+      <div class="profile-mode-bar" role="tablist" aria-label="Shopping Profile Mode">
+        <button class="profile-tab-btn active" data-profile="all" id="profileBtnAll" title="सब कुछ (All-in-One)">
+          <span class="profile-icon">🛒</span>
+          <span class="profile-text" id="profileTextAll">सब कुछ (All)</span>
+        </button>
+        <button class="profile-tab-btn" data-profile="sabzi_fruits" id="profileBtnSabzi" title="सिर्फ सब्जी व फल">
+          <span class="profile-icon">🥦🍎</span>
+          <span class="profile-text" id="profileTextSabzi">सब्जी व फल</span>
+        </button>
+        <button class="profile-tab-btn" data-profile="grocery" id="profileBtnGrocery" title="किराना व राशन (DMart)">
+          <span class="profile-icon">🏬</span>
+          <span class="profile-text" id="profileTextGrocery">किराना / राशन</span>
+        </button>
+      </div>
+
+      <!-- Navigation Tabs: Catalog vs Basket -->
+      <nav class="nav-tabs" role="tablist">
+        <button id="tabCatalogBtn" class="tab-btn active" role="tab" aria-selected="true">
+          <span id="tabCatalogText">🛒 सामान चुनें (Catalog)</span>
+        </button>
+        <button id="tabBasketBtn" class="tab-btn" role="tab" aria-selected="false">
+          <span id="tabBasketText">🧺 मेरी थैली (Basket)</span>
+          <span id="tabBasketBadge" class="tab-badge" style="display: none;">0</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- MAIN VIEW 1: CATALOG VIEW -->
+    <main id="catalogView">
+      <!-- Search & Voice Input -->
+      <div class="search-container">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="सामान खोजें / Search (उदा: आटा, Toor Dal, Surf, घी)..." 
+            autocomplete="off"
+            aria-label="किराना सामान खोजें"
+          >
+          <button id="clearSearchBtn" class="clear-search-btn" style="display: none;" title="हटाएं">✕</button>
+          <button id="voiceSearchBtn" class="mic-btn" title="बोलकर खोजें (Mic)" aria-label="Voice Search">
+            🎤
+          </button>
+        </div>
+      </div>
+
+      <!-- DMart Supermarket Categories Bar -->
+      <div class="category-bar-wrapper">
+        <div id="categoryChipsContainer" class="category-chips">
+          <!-- Dynamically populated from groceries-data.js -->
+        </div>
+      </div>
+
+      <!-- Quick Add Custom Item Helper Banner -->
+      <div class="quick-helper-banner">
+        <p id="customBannerText">💡 कोई खास ब्रांड या अलग राशन चाहिए?</p>
+        <button id="openCustomItemBtn" class="quick-add-custom-btn">+ अलग सामान जोड़ें</button>
+      </div>
+
+      <!-- Grocery Grid Section -->
+      <section class="grid-section">
+        <div class="section-title-row">
+          <div class="section-title">
+            <span id="currentCategoryIcon">🛒</span>
+            <span id="currentCategoryTitle">सभी किराना सामान (All Groceries)</span>
+          </div>
+          <span id="itemCountText" class="section-count"></span>
+        </div>
+
+        <!-- Vegetable Sub-Category Filter (Visible when category is vegetables) -->
+        <div id="vegSubCategoryBar" style="display: none; margin-bottom: 14px; overflow-x: auto; white-space: nowrap; padding-bottom: 4px;">
+          <div class="category-chips" id="vegSubChipsContainer"></div>
+        </div>
+
+        <div id="groceryGrid" class="grocery-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+    </main>
+
+    <!-- MAIN VIEW 2: BASKET (MY CART) VIEW -->
+    <section id="basketView" class="basket-view" style="display: none;">
+      <div id="basketContent"></div>
+    </section>
+
+    <!-- FLOATING BOTTOM BAR -->
+    <div id="floatingBottomBar" class="floating-bottom-bar" style="display: none;">
+      <div id="floatingBasketClick" class="floating-basket-info">
+        <div class="floating-icon-wrap">
+          🧺
+          <span id="floatingItemCountBadge" class="floating-badge">0</span>
+        </div>
+        <div class="floating-text-wrap">
+          <h4 id="floatingTitleText">थैली में 0 सामान</h4>
+          <p id="floatingSubtitleText">देखने व WhatsApp भेजने के लिए टैप करें</p>
+        </div>
+      </div>
+      <div class="floating-actions">
+        <button id="floatingShareWhatsAppBtn" class="floating-share-btn">
+          <span>📲 WhatsApp</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT QUANTITY SHEET -->
+    <div id="qtyModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <div class="modal-header-item">
+          <div id="modalItemEmoji" class="modal-item-emoji">🌾</div>
+          <div class="modal-item-titles">
+            <h2 id="modalItemPriTitle">अरहर दाल</h2>
+            <p id="modalItemSecTitle">Toor Dal / Arhar Dal</p>
+          </div>
+        </div>
+
+        <!-- Quick Unit Pills -->
+        <p id="modalUnitsLabel" style="font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 8px;">
+          मात्रा चुनें (Select Quantity):
+        </p>
+        <div id="modalUnitsGrid" class="unit-presets-grid"></div>
+
+        <!-- Custom Quantity Stepper -->
+        <div class="custom-qty-row">
+          <span id="modalStepperLabel" style="font-weight: 700; font-size: 0.95rem; color: #334155;">मात्रा बदलें:</span>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button id="stepperMinusBtn" class="stepper-btn">−</button>
+            <span id="stepperDisplay" class="stepper-value">1 kg</span>
+            <button id="stepperPlusBtn" class="stepper-btn">+</button>
+          </div>
+        </div>
+
+        <!-- Optional Note / Brand Input -->
+        <div class="note-input-wrap">
+          <label id="modalNoteLabel" for="modalNoteInput">कोई खास बात / ब्रांड (Note / Brand preference):</label>
+          <input 
+            type="text" 
+            id="modalNoteInput" 
+            class="note-input" 
+            placeholder="उदा: अमूल ब्रांड, 5 kg का थैला..."
+          >
+        </div>
+
+        <button id="modalAddConfirmBtn" class="add-modal-btn">
+          <span id="modalAddConfirmBtnText">🧺 थैली में जोड़ें</span>
+        </button>
+
+        <button id="modalCloseBtn" style="width: 100%; background: transparent; border: none; padding: 12px; margin-top: 6px; color: #64748b; font-weight: 700; font-size: 0.95rem; cursor: pointer;">
+          रद्द करें (Cancel)
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL: ADD CUSTOM ITEM SHEET -->
+    <div id="customItemModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: #047857; margin-bottom: 4px;">
+          + अलग सामान या राशन जोड़ें
+        </h2>
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 18px;">
+          अगर कोई खास राशन या सामान लिस्ट में न मिले, तो यहाँ लिखें:
+        </p>
+
+        <div class="settings-form-group">
+          <label for="customItemName">सामान का नाम (Item Name):</label>
+          <input 
+            type="text" 
+            id="customItemName" 
+            class="settings-input" 
+            placeholder="जैसे: काजू-बादाम, अगरबत्ती, खास चाय, ब्राउन ब्रेड..."
+          >
+        </div>
+
+        <div class="settings-form-group">
+          <label for="customItemQty">मात्रा (Quantity):</label>
+          <input 
+            type="text" 
+            id="customItemQty" 
+            class="settings-input" 
+            placeholder="जैसे: 1 kg, 500 g, 1 पैकेट, 2 बोतल..." 
+            value="1 पैकेट"
+          >
+        </div>
+
+        <div class="settings-form-group">
+          <label for="customItemNote">ब्रांड या नोट (Brand / Note):</label>
+          <input 
+            type="text" 
+            id="customItemNote" 
+            class="settings-input" 
+            placeholder="जैसे: टाटा ब्रांड, छोटा पैकेट"
+          >
+        </div>
+
+        <button id="customItemAddBtn" class="add-modal-btn" style="margin-top: 10px;">
+          <span>✅ थैली में जोड़ें</span>
+        </button>
+        <button id="customItemCloseBtn" style="width: 100%; background: transparent; border: none; padding: 12px; margin-top: 6px; color: #64748b; font-weight: 700; cursor: pointer;">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL: SETTINGS (WHATSAPP PHONE NUMBER) -->
+    <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: #047857; margin-bottom: 6px;">
+          ⚙️ WhatsApp सेटिंग्स
+        </h2>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 18px;">
+          मम्मी जिसे किराना लिस्ट भेजना चाहती हैं (बेटा/बेटी/पति), उनका WhatsApp नंबर यहाँ भरें।
+        </p>
+
+        <div class="settings-form-group">
+          <label for="recipientPhoneInput">WhatsApp नंबर (Country code के साथ):</label>
+          <p>उदा: 919876543210 (खाली रखने पर WhatsApp में किसी को भी चुन सकते हैं)</p>
+          <input 
+            type="tel" 
+            id="recipientPhoneInput" 
+            class="settings-input" 
+            placeholder="+91 98765 43210"
+          >
+        </div>
+
+        <div class="settings-form-group">
+          <label for="senderNameInput">मम्मी का नाम (Greeting Name):</label>
+          <input 
+            type="text" 
+            id="senderNameInput" 
+            class="settings-input" 
+            placeholder="जैसे: मम्मी (Mom)" 
+            value="मम्मी"
+          >
+        </div>
+
+        <button id="saveSettingsBtn" class="add-modal-btn" style="margin-top: 10px;">
+          <span>💾 सुरक्षित करें (Save)</span>
+        </button>
+        <button id="closeSettingsBtn" style="width: 100%; background: transparent; border: none; padding: 12px; margin-top: 6px; color: #64748b; font-weight: 700; cursor: pointer;">
+          बंद करें
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL: HELP & INSTRUCTIONS -->
+    <div id="helpModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: #047857; margin-bottom: 8px;">
+          🛒 घर का किराना ऐप का उपयोग
+        </h2>
+        <div style="font-size: 0.95rem; color: #334155; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="font-size: 1.4rem;">🌐</span>
+            <div><strong>भाषा बदलें:</strong> ऊपर दिए गए बटन <code>[दोनों | हिन्दी | Eng]</code> से पूरी ऐप को तुरंत हिंदी या इंग्लिश में बदल सकते हैं।</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="font-size: 1.4rem;">🛒</span>
+            <div><strong>D-Mart श्रेणियां:</strong> सब्जियां, फल, दालें, आटा-चावल, तेल-मसाले, दूध-दही, फ्रोजन, सफाई व डिटर्जेंट, पर्सनल केयर आदि से आसानी से सामान चुनें।</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="font-size: 1.4rem;">🎤</span>
+            <div><strong>बोलकर खोजें:</strong> माइक 🎤 दबाएं और राशन का नाम बोलें (जैसे: अरहर दाल, बासमती चावल, सर्फ, घी)।</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="font-size: 1.4rem;">📲</span>
+            <div><strong>WhatsApp पर भेजें:</strong> "मेरी थैली" पर जाएं और हरे रंग का "WhatsApp पर भेजें" बटन दबाएं। पूरी लिस्ट सुंदर मैसेज बनकर WhatsApp में खुलेगी!</div>
+          </div>
+        </div>
+        <button id="closeHelpBtn" class="add-modal-btn">
+          <span>समझ आ गया 👍</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastMsg" class="toast-msg">
+      <span id="toastIcon">✅</span>
+      <span id="toastText">थैली में जोड़ा गया!</span>
+    </div>
+
+  </div>
+
+  <script src="groceries-data.js"></script>
+  <script src="sabzi-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

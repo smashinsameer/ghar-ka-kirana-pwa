@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="cartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#022c22" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle circular accent -->
+  <circle cx="256" cy="256" r="215" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="6" stroke-dasharray="14 14"/>
+
+  <!-- Shopping Cart & Groceries Group -->
+  <g filter="url(#shadow)" transform="translate(0, -5)">
+    
+    <!-- Grocery Items Poking Out of Cart -->
+    <!-- Milk Bottle / Dairy Carton -->
+    <rect x="180" y="105" width="55" height="110" rx="10" fill="#38bdf8"/>
+    <rect x="192" y="85" width="30" height="25" rx="5" fill="#bae6fd"/>
+    <text x="207" y="165" font-family="'Segoe UI', sans-serif" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle">MILK</text>
+
+    <!-- Carrot / Vegetable -->
+    <path d="M255 180 L290 80 C293 72 305 78 300 88 L280 180 Z" fill="#f97316"/>
+    <path d="M295 78 C290 50 280 45 275 40 C288 48 295 58 295 72" stroke="#22c55e" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M298 74 C310 50 320 45 325 40 C317 50 310 60 302 74" stroke="#16a34a" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+    <!-- Bread / Cereal Loaf -->
+    <rect x="235" y="130" width="75" height="75" rx="14" fill="#f59e0b"/>
+    <path d="M245 145 Q272 135 298 145" stroke="#d97706" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+    <!-- Fresh Apple / Fruit -->
+    <circle cx="160" cy="180" r="32" fill="#ef4444"/>
+    <path d="M160 152 C158 142 148 142 160 138 C172 142 162 142 160 152 Z" fill="#22c55e"/>
+
+    <!-- Shopping Cart Wireframe / Body -->
+    <path d="M110 180 H390 L350 325 C346 340 332 350 316 350 H160 C144 350 130 340 126 325 L100 130 H75" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Cart Grid Lines -->
+    <line x1="150" y1="230" x2="370" y2="230" stroke="#ffffff" stroke-width="6" stroke-opacity="0.7"/>
+    <line x1="165" y1="285" x2="350" y2="285" stroke="#ffffff" stroke-width="6" stroke-opacity="0.7"/>
+    <line x1="205" y1="190" x2="190" y2="340" stroke="#ffffff" stroke-width="6" stroke-opacity="0.7"/>
+    <line x1="265" y1="190" x2="255" y2="340" stroke="#ffffff" stroke-width="6" stroke-opacity="0.7"/>
+    <line x1="325" y1="190" x2="320" y2="340" stroke="#ffffff" stroke-width="6" stroke-opacity="0.7"/>
+
+    <!-- Cart Wheels -->
+    <circle cx="175" cy="405" r="28" fill="#ffffff"/>
+    <circle cx="175" cy="405" r="14" fill="#047857"/>
+
+    <circle cx="315" cy="405" r="28" fill="#ffffff"/>
+    <circle cx="315" cy="405" r="14" fill="#047857"/>
+
+    <!-- Wheel Connector Chassis -->
+    <path d="M150 355 L175 405 H315 L335 355" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Text Ribbon 'KIRANA' -->
+    <rect x="135" y="445" width="242" height="42" rx="21" fill="#fef08a"/>
+    <text x="256" y="474" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="900" fill="#854d0e" letter-spacing="3" text-anchor="middle">DMART LIST</text>
+  </g>
+</svg>
