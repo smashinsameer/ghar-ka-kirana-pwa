@@ -23,6 +23,7 @@
   let currentCategory = 'all';
   let currentSubCategory = 'all';
   let searchQuery = '';
+  let activeTab = 'catalog';
   let activeModalItem = null;
   let activeModalUnit = '';
   let activeModalNote = '';
@@ -128,6 +129,7 @@
     registerServiceWorker();
     applyLanguageMode(langMode);
     applyProfileMode(currentProfile, false);
+    setupNavigation();
     updateCartUI();
     bindEvents();
   }
@@ -1087,7 +1089,32 @@
   }
 
   // --- TABS & UI HELPERS ---
-  function switchTab(target) {
+  function setupNavigation() {
+    const initialTab = window.location.hash === '#basket' ? 'basket' : 'catalog';
+    history.replaceState({ kiranaTab: initialTab }, '', initialTab === 'basket' ? '#basket' : `${window.location.pathname}${window.location.search}`);
+    switchTab(initialTab, false, false);
+
+    window.addEventListener('popstate', (event) => {
+      switchTab(event.state && event.state.kiranaTab === 'basket' ? 'basket' : 'catalog', false);
+    });
+  }
+
+  function switchTab(target, updateHistory = true, shouldScroll = true) {
+    if (target !== 'catalog' && target !== 'basket') return;
+
+    if (target === activeTab) return;
+
+    if (updateHistory && target === 'catalog' && history.state && history.state.kiranaTab === 'basket') {
+      history.back();
+      return;
+    }
+
+    activeTab = target;
+
+    if (updateHistory && target === 'basket') {
+      history.pushState({ kiranaTab: 'basket' }, '', '#basket');
+    }
+
     if (target === 'catalog') {
       tabCatalogBtn.classList.add('active');
       tabCatalogBtn.setAttribute('aria-selected', 'true');
@@ -1097,7 +1124,7 @@
       basketView.style.display = 'none';
       renderGroceryGrid();
       updateFloatingBar();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       tabBasketBtn.classList.add('active');
       tabBasketBtn.setAttribute('aria-selected', 'true');
@@ -1107,7 +1134,7 @@
       basketView.style.display = 'block';
       floatingBottomBar.style.display = 'none';
       renderBasketView();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 

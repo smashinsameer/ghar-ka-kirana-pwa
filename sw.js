@@ -1,5 +1,5 @@
 // Service Worker for 'घर का किराना' (Grocery & Supermarket PWA)
-const CACHE_NAME = 'kirana-list-cache-v4';
+const CACHE_NAME = 'kirana-list-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

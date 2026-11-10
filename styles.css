@@ -45,6 +45,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+button, input, textarea {
+  touch-action: manipulation;
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--bg-page);
@@ -1151,4 +1155,157 @@ input, textarea, .selectable-text {
 
 .toast-msg.show {
   transform: translateX(-50%) translateY(0);
+}
+
+/* Compact Android layout: supports common 360px–480px phone viewports. */
+@media (max-width: 479px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  .app-header {
+    padding: 12px 12px 14px;
+  }
+
+  .header-top {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .brand-wrapper {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .app-logo {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+  }
+
+  .brand-titles {
+    min-width: 0;
+  }
+
+  .brand-titles h1 {
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-titles p {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-controls {
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .lang-switcher {
+    flex: 1;
+    justify-content: space-around;
+  }
+
+  .lang-btn {
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 0.74rem;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  .profile-mode-bar {
+    margin-top: 10px;
+    gap: 2px;
+  }
+
+  .profile-tab-btn {
+    min-width: 0;
+    min-height: 42px;
+    padding: 7px 4px;
+    font-size: 0.74rem;
+    gap: 3px;
+    overflow: hidden;
+  }
+
+  .profile-tab-btn .profile-icon {
+    display: none;
+  }
+
+  .profile-text,
+  .tab-btn span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-tabs {
+    margin-top: 10px;
+  }
+
+  .tab-btn {
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 0.86rem;
+  }
+
+  .search-container {
+    padding: 12px 12px 4px;
+  }
+
+  .search-box {
+    padding: 5px 11px;
+    gap: 8px;
+  }
+
+  .search-input {
+    min-width: 0;
+  }
+
+  .category-bar-wrapper {
+    padding: 8px 12px;
+  }
+
+  .grid-section {
+    padding: 0 12px 20px;
+  }
+
+  .quick-helper-banner {
+    margin: 6px 12px 12px;
+  }
+}
+
+@media (max-width: 359px) {
+  .brand-titles p {
+    display: none;
+  }
+
+  .lang-btn {
+    padding: 6px 5px;
+    font-size: 0.7rem;
+  }
+
+  .profile-tab-btn {
+    font-size: 0.68rem;
+  }
+
+  .quick-helper-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quick-add-custom-btn {
+    min-height: 40px;
+  }
 }
