@@ -58,6 +58,7 @@ body {
   min-height: 100vh;
   user-select: none;
   -webkit-user-select: none;
+  overflow-x: hidden;
 }
 
 input, textarea, .selectable-text {
@@ -66,6 +67,7 @@ input, textarea, .selectable-text {
 }
 
 .app-container {
+  width: 100%;
   max-width: 720px;
   margin: 0 auto;
   position: relative;
@@ -1157,8 +1159,8 @@ input, textarea, .selectable-text {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Compact Android layout: supports common 360px–480px phone viewports. */
-@media (max-width: 479px) {
+/* Compact Android layout: supports common phone viewports and narrow app shells. */
+@media (max-width: 720px) {
   html, body {
     overflow-x: hidden;
   }
